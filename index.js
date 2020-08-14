@@ -3,6 +3,12 @@ let panel;
 let closeBtn;
 let shadow;
 
+const config = async () => {
+    const res = await fetch('./config.json');
+    return res;
+}
+
+
 
 const render = () => {
     if (document.getElementById('panel')) return;
