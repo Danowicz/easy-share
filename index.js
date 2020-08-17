@@ -1,8 +1,4 @@
-const openBtn = document.getElementById('btn-open');
-let panel;
-let shadow;
-let closeBtn;
-
+let openBtn;
 const settings = {
 
     parameters: {
@@ -12,6 +8,24 @@ const settings = {
         animations: true,
         links: [ 'copy', 'email', 'whatsapp', 'facebook', 'linkedin', 'telegram', 'twitter' ],
         message: 'Da só uma olhada nesse link!'
+    },
+
+    linkParameters(links) {
+    
+        links.forEach(link, () => {
+            return 
+            [
+                {
+                    name: copy,
+                    icon: 'fas fa-copy',
+                    copyURL() {
+                        
+                    }
+
+                }
+            ]
+        })
+    
     },
 
     config({bgColor, shadowOpacity, fontColor, animations}) {
@@ -26,6 +40,9 @@ const settings = {
             opacity: ${shadowOpacity};
         `
     }
+}
+
+
 }
 
 const buttonRender = ({links, message}) => {
@@ -76,26 +93,18 @@ const buttonRender = ({links, message}) => {
     // Create an input -> set input value to URL -> copy input value -> remove input;
     const copyBtn = document.getElementById('copy');
     copyBtn.addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.value = url;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand("copy");
-        input.remove();
-        window.alert('URL copiada para a área de transferência.')
+        
     })
 }
 
 const panelRender = () => {
-    if (panel) return;
-
     const panelDiv = '<div id="panel" class="panel"></div>'
     const shadowDiv = '<div id="shadow"></div>'
 
     document.body.innerHTML += panelDiv + shadowDiv;
 
-    panel = document.getElementById('panel');
-    shadow = document.getElementById('shadow');
+    const panel = document.getElementById('panel');
+    const shadow = document.getElementById('shadow');
 
     settings.config(settings.parameters);
 
@@ -108,12 +117,16 @@ const panelRender = () => {
 
     buttonRender(settings.parameters); 
 
-    closeBtn = document.getElementById('btn-close');
+    const closeBtn = document.getElementById('btn-close');
 
     closeBtn.addEventListener('click', () => {
         panel.remove();
         shadow.remove();
     });
+
 };
 
-openBtn.addEventListener('click', panelRender);
+openBtn = document.getElementById('btn-open');
+openBtn.addEventListener('click', () => {
+    panelRender();
+});
