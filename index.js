@@ -1,38 +1,43 @@
 const openBtn = document.getElementById('btn-open');
 let panel;
-let closeBtn;
 let shadow;
+let closeBtn;
 
-const parameters = {
-    bgColor: 'white',
-    shadowOpacity: '.8', // from 0 to 1
-    fontColor: '#444',
-    animations: true,
+const settings = {
 
-    links: [ 'copy', 'email', 'whatsapp', 'facebook', 'linkedin', 'telegram', 'twitter' ],
-    message: 'Da só uma olhada nesse link!'
-}
+    parameters: {
+        bgColor: '#f9f9f9',
+        shadowOpacity: '.8', // from 0 to 1
+        fontColor: '#444',
+        animations: true,
+        links: [ 'copy', 'email', 'whatsapp', 'facebook', 'linkedin', 'telegram', 'twitter' ],
+        message: 'Da só uma olhada nesse link!'
+    },
 
-const config = ({bgColor, shadowOpacity, fontColor, animations}) => {
-    panel.style.cssText = `
-        ${animations ? '' : 'animation: none;'}
-        background-color: ${bgColor};
-        color: ${fontColor};
+    config({bgColor, shadowOpacity, fontColor, animations}) {
+
+        panel.style.cssText = `
+            ${animations ? '' : 'animation: none;'}
+            background-color: ${bgColor};
+            color: ${fontColor};
         `
-
         shadow.style.cssText = `
-        ${animations ? '' : 'animation: none;'}
-        opacity: ${shadowOpacity};
+            ${animations ? '' : 'animation: none;'}
+            opacity: ${shadowOpacity};
         `
     }
+}
 
 const buttonRender = ({links, message}) => {
+
     const buttonGrid = document.querySelector('.buttons__grid');
     const url = window.location.href;
     const text = encodeURIComponent(message);
+
     links.forEach(link => {
         let icon = `fab fa-${link}`
         let shareLink;
+
         switch (link) {
             case 'copy':
                 icon = "fas fa-copy"
@@ -61,7 +66,9 @@ const buttonRender = ({links, message}) => {
         
         buttonGrid.innerHTML +=
            `<div class="buttons__wrapper">
-                <a target="_blank" ${shareLink ? `href=${shareLink}` : "id=copy"} class="buttons__btn"><i class="${icon}"></i></a>
+                <a target="_blank" ${shareLink ? `href=${shareLink}` : "id=copy"} class="buttons__btn">
+                    <i class="${icon}"></i>
+                </a>
                 <p class="buttons__label">${link}</p>
             </div>`
     });
@@ -79,23 +86,18 @@ const buttonRender = ({links, message}) => {
     })
 }
 
-const render = () => {
-    if (document.getElementById('panel')) return;
+const panelRender = () => {
+    if (panel) return;
 
-    const panelDiv = document.createElement('div');
-    panelDiv.id = 'panel';
-    panelDiv.className = 'panel';
+    const panelDiv = '<div id="panel" class="panel"></div>'
+    const shadowDiv = '<div id="shadow"></div>'
 
-    const shadowDiv = document.createElement('div');
-    shadowDiv.id = 'shadow';
-
-    document.body.appendChild(panelDiv);
-    document.body.appendChild(shadowDiv);
+    document.body.innerHTML += panelDiv + shadowDiv;
 
     panel = document.getElementById('panel');
     shadow = document.getElementById('shadow');
 
-    config(parameters);
+    settings.config(settings.parameters);
 
     panel.innerHTML =
     `
@@ -103,7 +105,8 @@ const render = () => {
         <p class="panel__title">Compartilhar</p>
         <div class="buttons__grid"></div>
     `
-    buttonRender(parameters); 
+
+    buttonRender(settings.parameters); 
 
     closeBtn = document.getElementById('btn-close');
 
@@ -113,6 +116,4 @@ const render = () => {
     });
 };
 
-openBtn.addEventListener('click', () => {
-    render();
-});
+openBtn.addEventListener('click', panelRender);
