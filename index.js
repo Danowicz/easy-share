@@ -27,18 +27,19 @@ const config = ({bgColor, shadowOpacity, fontColor, animations}) => {
     }
 
 const buttonRender = ({links, message}) => {
-    const buttonGrid = document.querySelector('.buttons__grid')
+    const buttonGrid = document.querySelector('.buttons__grid');
     const url = window.location.href;
     const text = encodeURIComponent(message);
     links.forEach(link => {
-        let icon = `<i class="fab fa-${link}"></i>`;
+        let icon = `fab fa-${link}`
         let shareLink;
         switch (link) {
             case 'copy':
-                icon = '<i class="fas fa-copy"></i>'
+                icon = "fas fa-copy"
+                link = "Copiar URL"
                 break;
             case 'email':
-                icon = '<i class="fas fa-envelope"></i>'
+                icon = "fas fa-envelope"
                 shareLink = `mailto:?subject=${text}&amp;body=${url}`
                 break;
             case 'whatsapp':
@@ -59,10 +60,22 @@ const buttonRender = ({links, message}) => {
         }
         
         buttonGrid.innerHTML +=
-            `<div class="buttons__wrapper">
-                <a target="_blank" href=${shareLink} id="btn-share" class="buttons__btn">${icon}</a>
+           `<div class="buttons__wrapper">
+                <a target="_blank" ${shareLink ? `href=${shareLink}` : "id=copy"} class="buttons__btn"><i class="${icon}"></i></a>
                 <p class="buttons__label">${link}</p>
-            </div>`    
+            </div>`
+    });
+
+    // Create an input -> set input value to URL -> copy input value -> remove input;
+    const copyBtn = document.getElementById('copy');
+    copyBtn.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+        window.alert('URL copiada para a área de transferência.')
     })
 }
 
