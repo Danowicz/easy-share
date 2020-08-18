@@ -1,5 +1,9 @@
 const openBtn = document.getElementById('btn-open');
 
+openBtn.addEventListener('click', () => {
+    renders.panelRender();
+});
+
 const settings = {
 
     parameters: {
@@ -64,9 +68,9 @@ const settings = {
 
 const renders = {
     
-    buttonRender([data, url]) {
+    buttonRender([shareData, url]) {
         const buttonsGrid = document.querySelector('.buttons__grid');
-        data.forEach((link => {
+        shareData.forEach((link => {
             buttonsGrid.innerHTML +=`
                 <div class="buttons__wrapper">
                     <a target="_blank" ${link.shareLink ? `href=${link.shareLink}` : "id=copy"} class="buttons__btn">
@@ -76,12 +80,19 @@ const renders = {
                 </div>`
         }))
 
-        const copy = document.getElementById('copy');
-        copy.addEventListener('click', () => {
-            const input = document.createElement('input');
-            input.value = url;
-            document.body.appendChild(input);
-        })
+        // Create a temporary input -> set value to URL -> copy input -> delete;
+        if (shareData.find(data => data.name === 'copy')) {
+            const copy = document.getElementById('copy');
+            copy.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand("copy");
+                input.remove();
+                window.alert('URL Copiada para a área de transferência.')
+            })
+        } 
     },
 
     panelRender() {
@@ -112,7 +123,3 @@ const renders = {
     }
 }
 
-
-openBtn.addEventListener('click', () => {
-    renders.panelRender();
-});
