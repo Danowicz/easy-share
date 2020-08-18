@@ -71,13 +71,14 @@ const renders = {
     buttonRender([shareData, url]) {
         const buttonsGrid = document.querySelector('.buttons__grid');
         shareData.forEach((link => {
-            buttonsGrid.innerHTML +=`
+            buttonsGrid.insertAdjacentHTML("beforeend", `
                 <div class="buttons__wrapper">
                     <a target="_blank" ${link.shareLink ? `href=${link.shareLink}` : "id=copy"} class="buttons__btn">
                         <i class="${link.icon}"></i>
                     </a>
                     <p class="buttons__label">${link.name}</p>
                 </div>`
+            )
         }))
 
         // Create a temporary input -> set value to URL -> copy input -> delete;
@@ -106,8 +107,8 @@ const renders = {
 
         const shadowDiv = '<div id="shadow"></div>'
     
-        document.body.innerHTML += panelDiv + shadowDiv;
-    
+        document.body.insertAdjacentHTML("afterend", panelDiv + shadowDiv) ;
+
         const panel = document.getElementById('panel');
         const shadow = document.getElementById('shadow');
         
@@ -120,6 +121,7 @@ const renders = {
             panel.remove();
             shadow.remove();
         });
+
     }
 }
 
