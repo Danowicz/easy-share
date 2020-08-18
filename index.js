@@ -1,3 +1,5 @@
+const openBtn = document.getElementById('btn-open');
+
 const settings = {
 
     parameters: {
@@ -43,10 +45,10 @@ const settings = {
             if (shareLink) shareData.push({name: link, icon, shareLink});
             else shareData.push({name: link, icon});
         })
-        return shareData;
+        return [shareData, url];
     },
 
-    config({bgColor, shadowOpacity, fontColor, animations}) {
+    config({bgColor, shadowOpacity, fontColor, animations}, panel, shadow) {
 
         panel.style.cssText = `
             ${animations ? '' : 'animation: none;'}
@@ -61,9 +63,10 @@ const settings = {
 }
 
 const renders = {
-    buttonRender(params) {
+    
+    buttonRender([data, url]) {
         const buttonsGrid = document.querySelector('.buttons__grid');
-        params.forEach((link => {
+        data.forEach((link => {
             buttonsGrid.innerHTML +=`
                 <div class="buttons__wrapper">
                     <a target="_blank" ${link.shareLink ? `href=${link.shareLink}` : "id=copy"} class="buttons__btn">
@@ -72,6 +75,13 @@ const renders = {
                     <p class="buttons__label">${link.name}</p>
                 </div>`
         }))
+
+        const copy = document.getElementById('copy');
+        copy.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+        })
     },
 
     panelRender() {
@@ -89,13 +99,12 @@ const renders = {
     
         const panel = document.getElementById('panel');
         const shadow = document.getElementById('shadow');
-    
-        settings.config(settings.parameters);
-    
+        
+        settings.config(settings.parameters, panel, shadow);
+        
         this.buttonRender(settings.linkParameters(settings.parameters.message, window.location.href));
-    
+        
         const closeBtn = document.getElementById('btn-close');
-    
         closeBtn.addEventListener('click', () => {
             panel.remove();
             shadow.remove();
@@ -103,7 +112,7 @@ const renders = {
     }
 }
 
-const openBtn = document.getElementById('btn-open');
+
 openBtn.addEventListener('click', () => {
     renders.panelRender();
 });
