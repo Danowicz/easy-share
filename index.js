@@ -10,7 +10,8 @@ const settings = {
         bgColor: '#f9f9f9',
         shadowOpacity: '.8', // from 0 to 1
         fontColor: '#444',
-        animations: true,
+        iconsColor: '#444',
+        animations: false,
         links: [ 'copy', 'email', 'whatsapp', 'linkedin', 'telegram', 'twitter' ],
         message: 'Da só uma olhada nesse link!'
     },
@@ -52,17 +53,14 @@ const settings = {
         return [shareData, url];
     },
 
-    config({bgColor, shadowOpacity, fontColor, animations}, panel, shadow) {
-
-        panel.style.cssText = `
-            ${animations ? '' : 'animation: none;'}
-            background-color: ${bgColor};
-            color: ${fontColor};
-        `
-        shadow.style.cssText = `
-            ${animations ? '' : 'animation: none;'}
-            opacity: ${shadowOpacity};
-        `
+    config({bgColor, shadowOpacity, fontColor, iconsColor, animations}, panel, shadow) {
+        const root = document.documentElement;
+        root.style.setProperty('--bgColor', `${bgColor}`);
+        root.style.setProperty('--fontColor', `${fontColor}`);
+        root.style.setProperty('--iconsColor', `${iconsColor}`);
+        root.style.setProperty('--shadowOpacity', `${shadowOpacity}`);
+        panel.style.animation = `${animations ? '' : 'none'}`;
+        shadow.style.animation = `${animations ? '' : 'none'}`;
     }
 }
 
